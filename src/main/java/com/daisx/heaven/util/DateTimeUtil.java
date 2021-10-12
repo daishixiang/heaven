@@ -1,7 +1,17 @@
 package com.daisx.heaven.util;
 
+import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONObject;
+
+import java.sql.SQLOutput;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * 日期时间工具类
@@ -245,6 +255,19 @@ public class DateTimeUtil {
         String hm = String.valueOf(System.nanoTime());
         str = str + hm.substring(hm.length() - 6);
         return str.substring(str.length() - t);
+    }
+
+
+    public static void main(String[] args) {
+        String code = StrUtil.padAfter("12", 6, "0");
+        System.out.println(code);
+    }
+
+    public static int digui(int n){
+        if (n<=1){
+            return 1;
+        }
+        return n*digui(n-1);
     }
 
 }
