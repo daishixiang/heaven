@@ -30,3 +30,5 @@ camunda:
     metrics:
       enabled: false
       db-reporter-activate: false
+    auto-deployment-enabled: false
+
