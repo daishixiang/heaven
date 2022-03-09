@@ -118,17 +118,61 @@
             <artifactId>camunda-bpm-spring-boot-starter</artifactId>
             <version>7.13.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.camunda.bpm.springboot</groupId>
-            <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
-            <version>7.13.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.camunda.bpm.springboot</groupId>-->
+<!--            <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>-->
+<!--            <version>7.13.0</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.camunda.bpm.springboot</groupId>
             <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
             <version>7.13.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>dysmsapi20170525</artifactId>
+            <version>2.0.7</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/cn.dev33/sa-token-oauth2 -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-oauth2</artifactId>
+            <version>1.28.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-reactor-spring-boot-starter</artifactId>
+            <version>1.28.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.pulsar</groupId>
+            <artifactId>pulsar-client</artifactId>
+            <version>2.8.1</version>
+        </dependency>
+        <!-- Sa-Token 权限认证（ServletAPI 集成包） -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-servlet</artifactId>
+            <version>1.28.0</version>
+        </dependency>
+
+        <!-- JOL依赖 -->
+        <dependency>
+            <groupId>org.openjdk.jol</groupId>
+            <artifactId>jol-core</artifactId>
+            <version>0.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

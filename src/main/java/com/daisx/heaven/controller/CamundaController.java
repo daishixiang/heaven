@@ -145,7 +145,7 @@ public class CamundaController {
             taskMap.put("taskId",task.getId());
             taskMap.put("taskName",task.getName());
             taskMap.put("processInstanceId",task.getProcessInstanceId());
-            taskMap.put("processDefinitionId",task.getProcessDefinitionId());
+            taskMap.put("processDefinitionId",task.getProcessDefinitionId()); 
             taskMap.put("createTime",task.getCreateTime());
             taskMap.put("assignee",task.getAssignee());
             taskMap.put("description",task.getDescription());

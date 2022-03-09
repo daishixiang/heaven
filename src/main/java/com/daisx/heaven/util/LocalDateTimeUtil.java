@@ -1,5 +1,8 @@
 package com.daisx.heaven.util;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.RandomUtil;
+
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -370,10 +373,18 @@ public class LocalDateTimeUtil {
 //        System.out.println("========降序=======");
 //        for (LocalDate desc:descDateList){
 //            System.out.println(desc);
-//        }
-        LocalDate of = LocalDate.of(2021, 10, 31);
-        int dayOfMonth = LocalDate.now().getDayOfMonth();
-        System.out.println(of.getDayOfMonth());
+////        }
+//        LocalDate of = LocalDate.of(2021, 10, 31);
+//        int dayOfMonth = LocalDate.now().getDayOfMonth();
+//        System.out.println(of.getDayOfMonth());
 
+
+        LocalDate now = LocalDate.now();
+        LocalTime nowTime = LocalTime.now();
+        int newHour = RandomUtil.randomInt(0, nowTime.getHour());
+        LocalTime localTime = nowTime.withHour(newHour);
+
+        LocalDateTime dateTime = now.atTime(localTime);
+        System.out.println(dateTime);
     }
 }
