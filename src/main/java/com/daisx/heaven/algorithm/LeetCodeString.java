@@ -3,6 +3,9 @@ package com.daisx.heaven.algorithm;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Stack;
 
 /**
  * @Author: dai.s.x
@@ -204,28 +207,22 @@ public class LeetCodeString {
      * @return
      */
     public static int myAtoi(String str) {
-        str = str.trim();//去掉前后的空格
-        //如果为空，直接返回0
+        str = str.trim();
         if (str.length() == 0) {
             return 0;
         }
-        int index = 0;//遍历字符串中字符的位置
-        int res = 0;//最终结果
-        int sign = 1;//符号，1是正数，-1是负数，默认为正数
+        int index = 0;
+        int res = 0;
+        int sign = 1;
         int length = str.length();
-        //判断符号
         if (str.charAt(index) == '-' || str.charAt(index) == '+'){
             sign = str.charAt(index++) == '+' ? 1 : -1;
         }
         for (; index < length; ++index) {
-            //取出字符串中字符，然后转化为数字
             int digit = str.charAt(index) - '0';
-            //按照题中的要求，读入下一个字符，直到到达下一个非数字字符或到达输入的结尾。
-            //字符串的其余部分将被忽略。如果读取了非数字，后面的都要忽略
             if (digit < 0 || digit > 9) {
                 break;
             }
-            //越界处理
             if (res > Integer.MAX_VALUE / 10 || (res == Integer.MAX_VALUE / 10 && digit > Integer.MAX_VALUE % 10)) {
                 return sign == 1 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
             }else {
@@ -236,10 +233,46 @@ public class LeetCodeString {
     }
 
 
+    /**
+     * 给你两个字符串haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串出现的第一个位置（下标从 0 开始）。如果不存在，则返回 -1 。
+     * KMP算法的本质就是减少重复计算，我们举个例子，比如下面的图中，在最后一步比较失败的时候，然后子串又要从头开始，主串要从上一次比较的下一个字符开始，
+     * 实际上前面的一些比较成功的数据我们是可以利用的。如下图所示，如果匹配失败的话，下一步主串还从失败的地方比较就可以了。
+     * @param haystack
+     * @param needle
+     * @return
+     */
+    public static int strStr(String haystack, String needle) {
+        haystack.indexOf(needle);
+        return 0;
+    }
+
+    public static int[] getNext(String ps) {
+        char[] p = ps.toCharArray();
+        int[] next = new int[p.length];
+        next[0] = -1;
+        int j = 0;
+        int k = -1;
+        while (j < p.length - 1) {
+            if (k == -1 || p[j] == p[k]) {
+                // 当两个字符相等时要跳过
+                if (p[++j] == p[++k]) {
+                    next[j] = next[k];
+                } else {
+                    next[j] = k;
+                }
+            } else {
+                k = next[k];
+            }
+        }
+        return next;
+    }
+
     public static void main(String[] args) {
 
-
-        System.out.println(isPalindrome1("A man, a plan, a canal: Panama"));
+        new HashMap<>();
+        new Stack<>();
+        new LinkedList<>();
+        System.out.println("");
 
     }
 }

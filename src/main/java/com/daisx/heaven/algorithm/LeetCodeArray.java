@@ -452,16 +452,8 @@ public class LeetCodeArray {
 
 
     public static void main(String[] args) {
-        int[][] matrix={{5,1,9,11},{2,4,8,10},{13,3,6,7},{15,14,12,16}};
 
-//        int[] nums={0,0,9,5,0,4,7,2,1};
-//        long l = System.currentTimeMillis();
-//        moveZeroes1(nums);
-//
-//        long time = System.currentTimeMillis() - l;
-//        System.out.println("耗时："+time);
-//        System.out.println(printArray(nums));
-
-        System.out.println(printMatrix(matrix));
+        System.out.println(Byte.MAX_VALUE);
+        System.out.println(Byte.MIN_VALUE);
     }
 }
