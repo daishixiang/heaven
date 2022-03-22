@@ -1,9 +1,9 @@
 package com.daisx.heaven.algorithm;
 
 import org.apache.poi.ss.formula.functions.Roman;
+import org.apache.pulsar.shade.org.checkerframework.checker.units.qual.A;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author: dai.s.x
@@ -246,14 +246,367 @@ public class LeetCodeTest {
         return ans;
     }
 
+    /**
+     * 公司有编号为 1到 n的 n个工程师，给你两个数组 speed和 efficiency，其中 speed[i]和 efficiency[i]分别代表第 i位工程师的速度和效率。请你返回由最多k个工程师组成的最大团队表现值，
+     * 由于答案可能很大，请你返回结果对 10^9 + 7 取余后的结果。
+     * 团队表现值的定义为：一个团队中「所有工程师速度的和」乘以他们「效率值中的最小值」
+     * @param n
+     * @param speed
+     * @param efficiency
+     * @param k
+     * @return
+     */
+    public static int maxPerformance(int n, int[] speed, int[] efficiency, int k) {
+        int[][] items = new int[n][2];
+        for(int i = 0 ; i < n ; i++){
+            items[i][0] = speed[i];
+            items[i][1] = efficiency[i];
+        }
+        Arrays.sort(items, (a, b) -> b[1] - a[1]);
+        PriorityQueue<Integer> queue = new PriorityQueue<>();
+        long res = 0, sum = 0;
+        for(int i = 0 ; i < n ; i++){
+            if(queue.size() > k - 1){
+                sum -= queue.poll();
+            }
+            res = Math.max(res, (sum + items[i][0])* items[i][1]);
+            queue.add(items[i][0]);
+            sum += items[i][0];
+        }
+        return (int)(res % ((int)1e9 + 7));
+    }
+
+
+    //定义三个指针，保证遍历数组中的每一个结果
+    public static List<List<Integer>> threeSum(int[] nums) {
+        //定义一个结果集
+        List<List<Integer>> res = new ArrayList<>();
+        //数组的长度
+        int len = nums.length;
+        //当前数组的长度为空，或者长度小于3时，直接退出
+        if(nums == null || len <3){
+            return res;
+        }
+        //将数组进行排序
+        Arrays.sort(nums);
+        //遍历数组中的每一个元素
+        for(int i = 0; i<len;i++){
+            //如果遍历的起始元素大于0，就直接退出
+            //原因，此时数组为有序的数组，最小的数都大于0了，三数之和肯定大于0
+            if(nums[i]>0){
+                break;
+            }
+            //去重，当起始的值等于前一个元素，那么得到的结果将会和前一次相同
+            if(i > 0 && nums[i] == nums[i-1]) {
+                continue;
+            }
+            int l = i +1;
+            int r = len-1;
+            //当 l 不等于 r时就继续遍历
+            while(l<r){
+                //将三数进行相加
+                int sum = nums[i] + nums[l] + nums[r];
+                //如果等于0，将结果对应的索引位置的值加入结果集中
+                if(sum==0){
+                    // 将三数的结果集加入到结果集中
+                    res.add(Arrays.asList(nums[i], nums[l], nums[r]));
+                    //在将左指针和右指针移动的时候，先对左右指针的值，进行判断
+                    //如果重复，直接跳过。
+                    //去重，因为 i 不变，当此时 l取的数的值与前一个数相同，所以不用在计算，直接跳
+                    while(l < r && nums[l] == nums[l+1]) {
+                        l++;
+                    }
+                    //去重，因为 i不变，当此时 r 取的数的值与前一个相同，所以不用在计算
+                    while(l< r && nums[r] == nums[r-1]){
+                        r--;
+                    }
+                    //将 左指针右移，将右指针左移。
+                    l++;
+                    r--;
+                    //如果结果小于0，将左指针右移
+                }else if(sum < 0){
+                    l++;
+                    //如果结果大于0，将右指针左移
+                }else if(sum > 0){
+                    r--;
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
+     *请实现一个函数用来匹配包含'. '和'*'的正则表达式。模式中的字符'.'表示任意一个字符，而'*'表示它前面的字符可以出现任意次（含0次）
+     * 在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串"aaa"与模式"a.a"
+     * @param s
+     * @param p
+     * @return
+     */
+    public static boolean isMatch(String s, String p) {
+        int n = s.length();
+        int m = p.length();
+        boolean[][] f = new boolean[n + 1][m + 1];
+
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= m; j++) {
+                //分成空正则和非空正则两种
+                if (j == 0) {
+                    f[i][j] = i == 0;
+                } else {
+                    //非空正则分为两种情况 * 和 非*
+                    if (p.charAt(j - 1) != '*') {
+                        if (i > 0 && (s.charAt(i - 1) == p.charAt(j - 1) || p.charAt(j - 1) == '.')) {
+                            f[i][j] = f[i - 1][j - 1];
+                        }
+                    } else {
+                        //碰到 * 了，分为看和不看两种情况
+                        //不看
+                        if (j >= 2) {
+                            f[i][j] |= f[i][j - 2];
+                        }
+                        //看
+                        if (i >= 1 && j >= 2 && (s.charAt(i - 1) == p.charAt(j - 2) || p.charAt(j - 2) == '.')) {
+                            f[i][j] |= f[i - 1][j];
+                        }
+                    }
+                }
+            }
+        }
+        return f[n][m];
+    }
+
+    /**
+     * 给你一个数组 nums和一个值 val，你需要 原地 移除所有数值等于val的元素，并返回移除后数组的新长度。
+     * 不要使用额外的数组空间，你必须仅使用 O(1) 额外空间并 原地 修改输入数组。
+     * 元素的顺序可以改变。你不需要考虑数组中超出新长度后面的元素。
+     * @param nums
+     * @param val
+     * @return
+     */
+    public static int removeElement(int[] nums, int val) {
+        int n = nums.length;
+        int left = 0;
+        for (int right = 0; right < n; right++) {
+            if (nums[right] != val) {
+                nums[left] = nums[right];
+                left++;
+            }
+        }
+        return left;
+    }
+
+    /**
+     * 实现strStr()函数。
+     *
+     * 给你两个字符串haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串出现的第一个位置（下标从 0 开始）。如果不存在，则返回 -1 。
+     *
+     * @param haystack
+     * @param needle
+     * @return
+     */
+    public int strStr(String haystack, String needle) {
+        int n = haystack.length();
+        int m = needle.length();
+        if (m == 0) {
+            return 0;
+        }
+        int[] pi = new int[m];
+        for (int i = 1, j = 0; i < m; i++) {
+            while (j > 0 && needle.charAt(i) != needle.charAt(j)) {
+                j = pi[j - 1];
+            }
+            if (needle.charAt(i) == needle.charAt(j)) {
+                j++;
+            }
+            pi[i] = j;
+        }
+        for (int i = 0, j = 0; i < n; i++) {
+            while (j > 0 && haystack.charAt(i) != needle.charAt(j)) {
+                j = pi[j - 1];
+            }
+            if (haystack.charAt(i) == needle.charAt(j)) {
+                j++;
+            }
+            if (j == m) {
+                return i - m + 1;
+            }
+        }
+        return -1;
+    }
+
+
+    public static int largestRectangleArea(int[] heights) {
+        int res = 0;
+        Stack<Integer> stack = new Stack<>();
+
+        int[] newHeights = new int[heights.length + 2];
+        newHeights[0] = 0;
+        newHeights[newHeights.length-1] = 0;
+        for (int i = 1; i < heights.length + 1; i++) {
+            newHeights[i] = heights[i - 1];
+        }
+
+        for (int i = 0; i < newHeights.length; i++) {
+            while (!stack.isEmpty() && newHeights[i] < newHeights[stack.peek()]) {
+                int cur = stack.pop();
+                int curHeight = newHeights[cur];
+                int leftIndex = stack.peek();
+                int rightIndex = i;
+                int curWidth = rightIndex - leftIndex - 1;
+                res = Math.max(res, curWidth * curHeight);
+            }
+
+            stack.push(i);
+        }
+
+        return res;
+    }
+
+    /**
+     * 给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 最多出现两次 ，返回删除后数组的新长度。
+     * 不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
+     * @param nums
+     * @return
+     */
+    public static int removeDuplicates(int[] nums) {
+        int n=nums.length;
+        if (n<3){
+            return n;
+        }
+        int left=2;
+        int right=2;
+        while (right<n){
+            if (nums[left-2]!=nums[right]){
+                nums[left]=nums[right];
+                left++;
+            }
+            right++;
+        }
+        return left;
+    }
+
+    /**
+     * 给定一个非负整数 numRows，生成「杨辉三角」的前 numRows 行。
+     * 在「杨辉三角」中，每个数是它左上方和右上方的数的和。
+     * @param numRows
+     * @return
+     */
+    public static List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> res=new ArrayList<>();
+        List<Integer> l1=new ArrayList<>(1);
+        l1.add(1);
+        res.add(l1);
+        for (int i = 1; i < numRows; i++) {
+            List<Integer> li=new ArrayList<>(i+1);
+            List<Integer> ri = res.get(i-1);
+            li.add(1);
+            for (int j=1;j<i;j++){
+                li.add(ri.get(j-1)+ri.get(j));
+            }
+            li.add(1);
+            res.add(li);
+        }
+        return res;
+    }
+
+    /**
+     * 输入整数数组 arr ，找出其中最小的 k 个数。例如，输入4、5、1、6、2、7、3、8这8个数字，则最小的4个数字是1、2、3、4。
+     * @param arr
+     * @param k
+     * @return
+     */
+    public  static int[] getLeastNumbers(int[] arr, int k) {
+        int[] res = new int[k];
+        if (k == 0) {
+            return res;
+        }
+        PriorityQueue<Integer> queue = new PriorityQueue<>((num1, num2) -> num2 - num1);
+        for (int i = 0; i < k; ++i) {
+            queue.offer(arr[i]);
+        }
+        for (int i = k; i < arr.length; ++i) {
+            if (queue.peek() > arr[i]) {
+                queue.poll();
+                queue.offer(arr[i]);
+            }
+        }
+        for (int i = 0; i < k; ++i) {
+            res[i] = queue.poll();
+        }
+        return res;
+    }
+
+
+    /**
+     * 给定一个字符串 s 和一个整数 k。你可以从 s 的前 k 个字母中选择一个，并把它加到字符串的末尾。
+     * 返回 在应用上述步骤的任意数量的移动后，字典上最小的字符串。
+     * @param s
+     * @param k
+     * @return
+     */
+    public static String orderlyQueue(String s, int k) {
+        if (k==1){
+            String res=s;
+            for (int i = 0; i < s.length(); i++) {
+                String s1 = s.substring(i) + s.substring(0, i);
+                if (s1.compareTo(res)<0){
+                    res=s1;
+                }
+            }
+            return res;
+        }else {
+            char[] chars = s.toCharArray();
+            Arrays.sort(chars);
+            return new String(chars);
+        }
+    }
+
+    /**
+     *
+     * @param grid
+     * @return
+     */
+    public static int surfaceArea(int[][] grid) {
+        int rows = grid.length;
+        int cols = grid[0].length;
+
+        int sum = 0;
+        int verticalOverlap = 0;
+        int rowOverlap = 0;
+        int colOverlap = 0;
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                sum += grid[i][j];
+
+                if (grid[i][j] > 1) {
+                    verticalOverlap += (grid[i][j] - 1);
+                }
+
+                if (j > 0) {
+                    rowOverlap += Math.min(grid[i][j - 1], grid[i][j]);
+                }
+
+                if (i > 0) {
+                    colOverlap += Math.min(grid[i - 1][j], grid[i][j]);
+                }
+            }
+        }
+        return sum * 6 - (verticalOverlap + rowOverlap + colOverlap) * 2;
+    }
+
 
     public static void main(String[] args) {
-        int[] num1={1,3};
-        int[] num2={2,7};
 
+        List<List<Integer>> generate = generate(5);
+        for (int i = 0; i < generate.size(); i++) {
+            List<Integer> integers = generate.get(i);
+            for (int i1 = 0; i1 < integers.size(); i1++) {
+                System.out.print(integers.get(i1));
+            }
+            System.out.println();
+        }
 
-
-        String s="aaaaa";
-        System.out.println(findMedianSortedArrays2(num1,num2));
     }
+
 }
