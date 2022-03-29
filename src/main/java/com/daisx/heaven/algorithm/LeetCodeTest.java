@@ -596,17 +596,84 @@ public class LeetCodeTest {
     }
 
 
-    public static void main(String[] args) {
-
-        List<List<Integer>> generate = generate(5);
-        for (int i = 0; i < generate.size(); i++) {
-            List<Integer> integers = generate.get(i);
-            for (int i1 = 0; i1 < integers.size(); i1++) {
-                System.out.print(integers.get(i1));
+    public static int maxDiff(int num) {
+        // 将数字转为字符数组存储
+        char[] ch1 = String.valueOf(num).toCharArray();
+        char[] ch2 = ch1.clone();
+        // 保存最大值
+        for(int i=0; i<ch1.length; i++){
+            // 从第一位判断是否为9
+            if(ch1[i] != 57){
+                char c = ch1[i];
+                // 将后面同样数字赋值为9
+                for(int j=i; j<ch1.length; j++){
+                    if(ch1[j] == c) {
+                        ch1[j] = 57;
+                    }
+                }
+                break;
             }
-            System.out.println();
         }
+        // 保存最小值，判断第一位是否为1
+        if(ch2[0] != 49){
+            char c = ch2[0];
+            for(int i=0; i<ch2.length; i++){
+                if(ch2[i] == c) {
+                    ch2[i] = 49;
+                }
+            }
+        }else{
+            for(int i=1; i<ch2.length; i++){
+                // 判断后面数字不为0且不为第一位，赋值为0
+                if(ch2[i] != 48 && ch2[i] != ch2[0]){
+                    char c = ch2[i];
+                    for(int j=i; j<ch2.length; j++){
+                        if(ch2[j] == c) {
+                            ch2[j] = 48;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        return Integer.parseInt(String.valueOf(ch1))-Integer.parseInt(String.valueOf(ch2));
+    }
 
+
+    public static String reformat(String s) {
+        char[] chars = s.toCharArray();
+        char[] res=new char[chars.length];
+        int c=0,n=0;
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i]>='0'&& chars[i]<='9'){
+                n++;
+            }else {
+                c++;
+            }
+        }
+        if (Math.abs(c-n)>1){
+            return "";
+        }
+        int i = c >= n ? 0 : 1;
+        int j = i == 0 ? 1 : 0;
+        for (char a : chars) {
+            if (a>='0'&& a<='9'){
+                res[j]=a;
+                j+=2;
+            }else {
+                res[i] = a;
+                i +=2;
+            }
+        }
+        return new String(res);
+    }
+
+
+    public static void main(String[] args) {
+        String s="a125b2gf";
+        System.out.println(reformat(s));
+
+        List<Boolean> list=new ArrayList<>();
     }
 
 }
